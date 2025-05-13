@@ -9,6 +9,7 @@ public class PhotoCapture : MonoBehaviour
     [Header("Photo Taker")]
     [SerializeField] private Image photoDisplayArea;
     [SerializeField] private GameObject photoFrame;
+    [SerializeField] private GameObject cameraUI; 
 
     [Header("Flash Effect")]
     [SerializeField] private GameObject cameraFlash;
@@ -16,6 +17,9 @@ public class PhotoCapture : MonoBehaviour
 
     [Header("Photo Fader Effect")]
     [SerializeField] private Animator fadingAnimation;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource cameraAudio;
     
     private Texture2D screenCapture;
     private bool viewingPhoto;
@@ -41,7 +45,7 @@ public class PhotoCapture : MonoBehaviour
 
     IEnumerator CapturePhoto()
     {
-        //camera UI set false;
+        cameraUI.SetActive(false);
         viewingPhoto = true;
         
         yield return new WaitForEndOfFrame();
@@ -67,7 +71,7 @@ public class PhotoCapture : MonoBehaviour
 
     IEnumerator CameraFlashEffect()
     {
-        //play audio
+        cameraAudio.Play();
         cameraFlash.SetActive(true);
         yield return new WaitForSeconds(flashTime);
         cameraFlash.SetActive(false);
@@ -78,6 +82,6 @@ public class PhotoCapture : MonoBehaviour
     {
         viewingPhoto = false;
         photoFrame.SetActive(false);
-        //Camera UI = true;
+        cameraUI.SetActive(true);
     }
 }
