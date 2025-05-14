@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CustomEditor(typeof(Line))]
-public class LineInspector : Editor {
+public class LineInspector : UnityEditor.Editor {
 
 	private void OnSceneGUI () {
 		Line line = target as Line;

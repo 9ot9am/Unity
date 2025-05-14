@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class RecordAudio : MonoBehaviour
 {
+    public static string latestFilename;
+    
     private AudioClip recordedClip;
     [SerializeField] private AudioSource audioSource;
 
@@ -33,7 +35,7 @@ public class RecordAudio : MonoBehaviour
         }
         
         
-        SaveAudioToWav.Save($"{recordedSamples} {Time.time}", recordedClip);
+        latestFilename = SaveAudioToWav.Save($"{recordedSamples} {Time.time}", recordedClip);
         recordedSamples++;
     }
 }

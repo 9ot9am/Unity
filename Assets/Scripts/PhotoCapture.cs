@@ -20,7 +20,12 @@ public class PhotoCapture : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioSource cameraAudio;
+
+    [SerializeField] private Canvas subtitleCanvas;
+
+    public Texture2D[] previousScreenCaptures = new Texture2D[10];
     
+    private int screenIndex = 0;
     private Texture2D screenCapture;
     private bool viewingPhoto;
     private void Start()
@@ -46,6 +51,7 @@ public class PhotoCapture : MonoBehaviour
     IEnumerator CapturePhoto()
     {
         cameraUI.SetActive(false);
+        subtitleCanvas?.gameObject.SetActive(false);
         viewingPhoto = true;
         
         yield return new WaitForEndOfFrame();
@@ -55,6 +61,10 @@ public class PhotoCapture : MonoBehaviour
         screenCapture.ReadPixels(regionToRead, 0, 0, false);
         screenCapture.Apply();
         ShowPhoto();
+        subtitleCanvas?.gameObject.SetActive(true);
+
+        previousScreenCaptures[screenIndex] = Instantiate(screenCapture);
+        screenIndex = (screenIndex + 1) % previousScreenCaptures.Length;
     }
 
     private void ShowPhoto()
@@ -72,9 +82,12 @@ public class PhotoCapture : MonoBehaviour
     IEnumerator CameraFlashEffect()
     {
         cameraAudio.Play();
-        cameraFlash.SetActive(true);
-        yield return new WaitForSeconds(flashTime);
-        cameraFlash.SetActive(false);
+        if (cameraFlash)
+        {
+            cameraFlash.SetActive(true);
+            yield return new WaitForSeconds(flashTime);
+            cameraFlash.SetActive(false);
+        }
     }
     
 

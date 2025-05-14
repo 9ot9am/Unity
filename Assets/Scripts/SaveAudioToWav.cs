@@ -45,7 +45,7 @@ public static class SaveAudioToWav
     private const uint HeaderSize = 44;
     private const float RescaleFactor = 32767; //to convert float to Int16
 
-    public static void Save(string filename, AudioClip clip, bool trim = false)
+    public static string Save(string filename, AudioClip clip, bool trim = false)
     {
         if (!filename.ToLower().EndsWith(".wav"))
         {
@@ -65,6 +65,8 @@ public static class SaveAudioToWav
             var wav = GetWav(clip, out var length, trim);
             writer.Write(wav, 0, (int)length);
         }
+
+        return filename;
     }
 
     public static byte[] GetWav(AudioClip clip, out uint length, bool trim = false)

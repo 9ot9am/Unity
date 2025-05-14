@@ -36,7 +36,7 @@ public class Singleton<T> : MonoBehaviour where T: MonoBehaviour
 
         _instance = GetComponent<T>();
         
-        if(keepAlive){
+        if(keepAlive && Application.isPlaying){
             DontDestroyOnLoad(gameObject);
         }
         

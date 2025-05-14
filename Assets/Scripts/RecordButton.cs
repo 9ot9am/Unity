@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,5 +29,11 @@ public class RecordButton : MonoBehaviour
     {
         _recordAudio.StopRecording();
         _recordAudio.PlayRecording();
+
+        var serverTest = FindFirstObjectByType<ServerTest>();
+        if (serverTest != null)
+        {
+            StartCoroutine(serverTest.UploadWavFile(Path.Combine(Application.persistentDataPath, RecordAudio.latestFilename)));
+        }
     }
 }

@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(BezierCurve))]
-public class BezierCurveInspector : Editor {
+public class BezierCurveInspector : UnityEditor.Editor {
 
 	private const int lineSteps = 10;
 	private const float directionScale = 0.5f;
