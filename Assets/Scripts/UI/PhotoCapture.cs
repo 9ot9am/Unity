@@ -32,8 +32,16 @@ public class PhotoCapture : MonoBehaviour
     [Header("Visuals to Hide")]
     [SerializeField] private GameObject leftControllerVisual;
     [SerializeField] private GameObject rightControllerVisual;
+    
+    [SerializeField] private GameObject nearFarLeft;
+    [SerializeField] private GameObject pokeLeft;
+    [SerializeField] private GameObject nearFarRight;
+    [SerializeField] private GameObject pokeRight;
+    
     [SerializeField] private Canvas subtitleCanvas;
     [SerializeField] private GameObject pastCaptureGameObject;
+    [SerializeField] private GameObject npcHelperModelGameObject;
+    [SerializeField] private GameObject fishDexCanvas;
 
     public Texture2D[] previousScreenCaptures = new Texture2D[10];
     
@@ -63,10 +71,18 @@ public class PhotoCapture : MonoBehaviour
     IEnumerator CapturePhoto()
     {
         cameraUI.SetActive(false);
+        
         subtitleCanvas?.gameObject.SetActive(false);
         leftControllerVisual?.SetActive(false);
         rightControllerVisual?.SetActive(false);
         pastCaptureGameObject?.SetActive(false);
+        npcHelperModelGameObject?.SetActive(false);
+        fishDexCanvas?.SetActive(false);
+        nearFarLeft?.SetActive(false);
+        pokeLeft?.SetActive(false);
+        nearFarRight?.SetActive(false);
+        pokeRight?.SetActive(false);
+        
         viewingPhoto = true;
         
         yield return new WaitForEndOfFrame();
@@ -76,10 +92,17 @@ public class PhotoCapture : MonoBehaviour
         screenCapture.ReadPixels(regionToRead, 0, 0, false);
         screenCapture.Apply();
         ShowPhoto();
+        
         subtitleCanvas?.gameObject.SetActive(true);
         leftControllerVisual?.SetActive(true);
         rightControllerVisual?.SetActive(true);
         pastCaptureGameObject?.SetActive(true);
+        npcHelperModelGameObject?.SetActive(true);
+        fishDexCanvas?.SetActive(true);
+        nearFarLeft?.SetActive(true);
+        pokeLeft?.SetActive(true);
+        nearFarRight?.SetActive(true);
+        pokeRight?.SetActive(true);
 
         previousScreenCaptures[screenIndex] = Instantiate(screenCapture);
         screenIndex = (screenIndex + 1) % previousScreenCaptures.Length;

@@ -14,10 +14,11 @@ public class NPCHelper3DController : MonoBehaviour
     [Header("References")]
     public Transform playerTransform; // Assign your Player's Transform here
     public Transform npcModelTransform; // Assign the visual part of the NPC (e.g., the Sphere child)
+    public Transform homingTargetTransform;
 
     [Header("Positioning")]
-    public Vector3 offsetFromPlayer = new Vector3(0.8f, 0.5f, 0.3f); // X: right, Y: up, Z: forward from player
     public float lookAtPlayerSmoothness = 5f; // How quickly the NPC turns to look near the player
+    public float playerHomingSpeed = 5f;
 
     [Header("NPC Settings")]
     public NPCState previousState = NPCState.Idle;
@@ -87,10 +88,6 @@ public class NPCHelper3DController : MonoBehaviour
 
     void Start()
     {
-        // Parent self to Player and set initial offset position
-        // The NPCHelper3D (this script's GameObject) will handle the offset
-        //transform.SetParent(playerTransform);
-        //transform.localPosition = offsetFromPlayer;
         transform.localRotation = Quaternion.identity; // Face same direction as player initially
 
         // The animations will operate on the npcModelTransform's local space
@@ -230,6 +227,11 @@ public class NPCHelper3DController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetState(NPCState.Talking);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetState(NPCState.Excited);
         if (Input.GetKeyDown(KeyCode.Alpha4)) SetState(NPCState.Encouraging);
+        
+        if (homingTargetTransform)
+        {
+            transform.position = Vector3.Lerp(transform.position, homingTargetTransform.position, Time.deltaTime * playerHomingSpeed);
+        }
     }
 
     void OnDestroy()
