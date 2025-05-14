@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishType: 4
   displyaName: "\uBE14\uB8E8\uD0F1"
-  maskedSprite: {fileID: 21300000, guid: 3fc52f8cb45bdf9498b6f7ef625f71b0, type: 3}
+  maskedSprite: {fileID: 21300000, guid: 13514eabb0eaba5498acf0e342bd00c4, type: 3}
