@@ -1,16 +1,20 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Screen = UnityEngine.Device.Screen;
 
 public class PhotoCapture : MonoBehaviour
 {
+    public event Action<Texture2D> OnPhotoTaken;
     
+    [SerializeField] private InputActionReference cameraInputAction;
+
     [Header("Photo Taker")]
     [SerializeField] private Image photoDisplayArea;
     [SerializeField] private GameObject photoFrame;
-    [SerializeField] private GameObject cameraUI; 
+    [SerializeField] private GameObject cameraUI;
 
     [Header("Flash Effect")]
     [SerializeField] private GameObject cameraFlash;
@@ -22,7 +26,11 @@ public class PhotoCapture : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource cameraAudio;
 
+    [Header("Visuals to Hide")]
+    [SerializeField] private GameObject leftControllerVisual;
+    [SerializeField] private GameObject rightControllerVisual;
     [SerializeField] private Canvas subtitleCanvas;
+    [SerializeField] private GameObject pastCaptureGameObject;
 
     public Texture2D[] previousScreenCaptures = new Texture2D[10];
     
@@ -36,7 +44,7 @@ public class PhotoCapture : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (cameraInputAction.action.WasPressedThisFrame())
         {
             if (!viewingPhoto)
             {
@@ -53,6 +61,9 @@ public class PhotoCapture : MonoBehaviour
     {
         cameraUI.SetActive(false);
         subtitleCanvas?.gameObject.SetActive(false);
+        leftControllerVisual?.SetActive(false);
+        rightControllerVisual?.SetActive(false);
+        pastCaptureGameObject?.SetActive(false);
         viewingPhoto = true;
         
         yield return new WaitForEndOfFrame();
@@ -63,9 +74,13 @@ public class PhotoCapture : MonoBehaviour
         screenCapture.Apply();
         ShowPhoto();
         subtitleCanvas?.gameObject.SetActive(true);
+        leftControllerVisual?.SetActive(true);
+        rightControllerVisual?.SetActive(true);
+        pastCaptureGameObject?.SetActive(true);
 
         previousScreenCaptures[screenIndex] = Instantiate(screenCapture);
         screenIndex = (screenIndex + 1) % previousScreenCaptures.Length;
+        OnPhotoTaken?.Invoke(previousScreenCaptures[screenIndex]);
     }
 
     private void ShowPhoto()
@@ -78,7 +93,6 @@ public class PhotoCapture : MonoBehaviour
         photoFrame.SetActive(true);
         StartCoroutine(CameraFlashEffect());
         fadingAnimation.Play("PhotoFade");
-
     }
 
     IEnumerator CameraFlashEffect()

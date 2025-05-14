@@ -1,18 +1,29 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class PastCaptureUI : MonoBehaviour
 {
+    [SerializeField] private InputActionReference captureOpenReference;
     [SerializeField] private GameObject uiPanelObject;
     public List<RawImage> images = new();
 
+    private void Start()
+    {
+        var photoCapture = FindFirstObjectByType<PhotoCapture>();
+        if (photoCapture)
+        {
+            photoCapture.OnPhotoTaken += (t) => SetUpImages();
+        }
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.U))
+        if (captureOpenReference.action.WasPressedThisFrame())
         {
             if (uiPanelObject.activeSelf)
             {
