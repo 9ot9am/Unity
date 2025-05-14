@@ -1,15 +1,18 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Screen = UnityEngine.Device.Screen;
 
 public class PhotoCapture : MonoBehaviour
 {
+    [SerializeField] private InputActionReference cameraInputAction;
+    
     [Header("Photo Taker")]
     [SerializeField] private Image photoDisplayArea;
     [SerializeField] private GameObject photoFrame;
-    [SerializeField] private GameObject cameraUI; 
+    [SerializeField] private GameObject cameraUI;
 
     [Header("Flash Effect")]
     [SerializeField] private GameObject cameraFlash;
@@ -35,7 +38,7 @@ public class PhotoCapture : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (cameraInputAction.action.WasPressedThisFrame())
         {
             if (!viewingPhoto)
             {

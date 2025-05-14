@@ -17,8 +17,7 @@ public class ServerTest: MonoBehaviour
             TestServerAudio();
         }
     }
-
-
+    
     public IEnumerator UploadWavFile(string filePath)
     {
         if (!File.Exists(filePath))
@@ -57,7 +56,7 @@ public class ServerTest: MonoBehaviour
             //uwr.uploadHandler.contentType = "application/octet-stream"; // Or "application/octet-stream"
 
             // Setup DownloadHandler to get the server's response
-            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.downloadHandler = new DownloadHandlerAudioClip(Constants.Url + "/api/audio", AudioType.WAV);
 
             // Set any other headers if needed (e.g., authorization)
             // uwr.SetRequestHeader("Authorization", "Bearer YOUR_TOKEN");
@@ -77,7 +76,9 @@ public class ServerTest: MonoBehaviour
             else
             {
                 Debug.Log("Upload successful!");
-                Debug.Log("Server Response: " + uwr.downloadHandler.text);
+                
+                AudioClip clip = DownloadHandlerAudioClip.GetContent(uwr);
+                audioReceived?.Invoke(clip);
                 // Optionally, delete the local file after successful upload
                 // File.Delete(filePath);
             }

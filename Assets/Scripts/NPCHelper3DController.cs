@@ -101,10 +101,10 @@ public class NPCHelper3DController : MonoBehaviour
 
         var servertest = FindFirstObjectByType<ServerTest>();
         if (!servertest) return;
-        servertest.audioReceived += ServertestOnaudioReceived;
+        servertest.audioReceived += OnAudioReceived;
     }
 
-    private void ServertestOnaudioReceived(AudioClip clip)
+    private void OnAudioReceived(AudioClip clip)
     {
         previousState = currentState;
         SetState(NPCState.Talking);
