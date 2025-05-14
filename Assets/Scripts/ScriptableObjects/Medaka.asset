@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91411e2ae9c1bd944a0b0b0593a47098, type: 3}
+  m_Name: Medaka
+  m_EditorClassIdentifier: 
+  fishType: 3
+  displyaName: "\uBA54\uB2E4\uCE74"
+  maskedSprite: {fileID: 21300000, guid: 1849c494ce33d0b4fb072331eb6484af, type: 3}
