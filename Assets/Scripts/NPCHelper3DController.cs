@@ -89,8 +89,8 @@ public class NPCHelper3DController : MonoBehaviour
     {
         // Parent self to Player and set initial offset position
         // The NPCHelper3D (this script's GameObject) will handle the offset
-        transform.SetParent(playerTransform);
-        transform.localPosition = offsetFromPlayer;
+        //transform.SetParent(playerTransform);
+        //transform.localPosition = offsetFromPlayer;
         transform.localRotation = Quaternion.identity; // Face same direction as player initially
 
         // The animations will operate on the npcModelTransform's local space

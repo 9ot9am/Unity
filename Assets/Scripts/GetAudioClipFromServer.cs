@@ -10,7 +10,7 @@ public static class GetAudioClipFromServer
     // using coroutine
     public static IEnumerator SendWav(string filename, Action<AudioClip> onComplted)
     {
-        var webRequest = UnityWebRequestMultimedia.GetAudioClip($"{Constants.Url}/get-file/{filename}", AudioType.WAV);
+        var webRequest = UnityWebRequestMultimedia.GetAudioClip($"{Constants.AIUrl}/get-file/{filename}", AudioType.WAV);
         Debug.Log(webRequest.uri.ToString());
         
         webRequest.SetRequestHeader("Content-Type", "text/plain");
