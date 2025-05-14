@@ -2077,6 +2077,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Open Fish Dex UI",
+                    "type": "Button",
+                    "id": "2f5b0755-3846-400e-b905-4e763fa1807a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -2396,6 +2405,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Open Past Captures UI",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58354e41-ab9f-44ab-8bb9-d7349b8d7630",
+                    "path": "<XRController>{RightHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Open Fish Dex UI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
