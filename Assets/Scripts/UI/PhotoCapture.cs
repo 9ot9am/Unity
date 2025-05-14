@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -26,6 +27,8 @@ public class PhotoCapture : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource cameraAudio;
 
+    [Header("Polaroid")] [SerializeField] private GameObject polaroidPrefab;
+    
     [Header("Visuals to Hide")]
     [SerializeField] private GameObject leftControllerVisual;
     [SerializeField] private GameObject rightControllerVisual;
@@ -85,14 +88,37 @@ public class PhotoCapture : MonoBehaviour
 
     private void ShowPhoto()
     {
-        Sprite photoSprite = Sprite.Create(screenCapture,
-        new Rect(0.0f, 0.0f, screenCapture.width, screenCapture.height), new Vector2(0.5f, 0.5f), 100.0f);
+        var newScreenCapture = Instantiate(screenCapture);
+        Sprite photoSprite = Sprite.Create(newScreenCapture,
+        new Rect(0.0f, 0.0f, newScreenCapture.width, newScreenCapture.height), new Vector2(0.5f, 0.5f), 100.0f);
 
         photoDisplayArea.sprite = photoSprite;
 
         photoFrame.SetActive(true);
         StartCoroutine(CameraFlashEffect());
         fadingAnimation.Play("PhotoFade");
+        StartCoroutine(CreatePolaroid(photoSprite));
+    }
+
+    private IEnumerator CreatePolaroid(Sprite sprite)
+    {
+        yield return new WaitForSeconds(1.5f);
+        
+        if (viewingPhoto)
+        {
+            RemovePhoto();
+        }
+        
+        var pos = cameraUI.transform.position;
+        var player = GameObject.FindGameObjectWithTag("Player");
+        var towardsPlayer = pos - player.transform.position;
+        var rotation = Quaternion.LookRotation(towardsPlayer);
+        var newPolaroid = Instantiate(polaroidPrefab, pos, rotation);
+
+        
+        var polaroid = newPolaroid.GetComponentInChildren<PolaroidDisplay>();
+        //yield return new WaitUntil(() => polaroid.instancedMaterial != null);
+        polaroid.SetPhoto(sprite.texture);
     }
 
     IEnumerator CameraFlashEffect()

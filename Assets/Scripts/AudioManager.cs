@@ -23,7 +23,7 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private SoundList[] soundList;
     [SerializeField] private AudioSource sfxAudioSource;
     [SerializeField] private AudioSource bgmAudioSource;
-
+    
     public static void PlaySound(SoundType sound, float volume = 1f)
     {
         instance.sfxAudioSource.PlayOneShot(instance.soundList[(int)sound].sound, volume);

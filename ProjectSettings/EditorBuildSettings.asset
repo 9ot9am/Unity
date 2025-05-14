@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/OceanPlayScene.unity
-    guid: e15b1ad53cc46e843b7b7a883d8e825c
+    path: Assets/Scenes/OceanPlayVRScene.unity
+    guid: 8a61519b357da5e40ba5b6f630c8aba8
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: f8333cfbe2e8f804c9417898848ddb6c, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

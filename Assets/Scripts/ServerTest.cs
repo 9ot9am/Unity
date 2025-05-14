@@ -48,7 +48,7 @@ public class ServerTest: MonoBehaviour
             // For PUT:
             // UnityWebRequest uwr = UnityWebRequest.Put(uploadURL, File.ReadAllBytes(filePath)); // Reads all bytes into memory
             // Or, more efficiently for large files with UploadHandlerFile:
-            UnityWebRequest uwr = UnityWebRequest.Post(Constants.Url + "/api/audio", formData); // Or kHttpVerbPOST
+            UnityWebRequest uwr = UnityWebRequest.Post(Constants.AIUrl + "/api/audio/enhanced", formData); // Or kHttpVerbPOST
 
             // Setup UploadHandlerFile - this streams the file from disk
             //uwr.uploadHandler = new UploadHandlerFile(filePath);
@@ -56,13 +56,13 @@ public class ServerTest: MonoBehaviour
             //uwr.uploadHandler.contentType = "application/octet-stream"; // Or "application/octet-stream"
 
             // Setup DownloadHandler to get the server's response
-            uwr.downloadHandler = new DownloadHandlerAudioClip(Constants.Url + "/api/audio", AudioType.WAV);
+            uwr.downloadHandler = new DownloadHandlerAudioClip(Constants.AIUrl + "/api/audio/enhanced", AudioType.WAV);
 
             // Set any other headers if needed (e.g., authorization)
             // uwr.SetRequestHeader("Authorization", "Bearer YOUR_TOKEN");
             //uwr.SetRequestHeader("Content-Type", "application/octet-stream"); // Often needed for PUT or raw POST
 
-            Debug.Log("Uploading " + filePath + " to " + Constants.Url + "/api/audio");
+            Debug.Log("Uploading " + filePath + " to " + Constants.AIUrl + "/api/audio/enhanced");
 
             yield return uwr.SendWebRequest();
 
@@ -129,7 +129,7 @@ public class ServerTest: MonoBehaviour
         */
         
         
-        var webRequest = UnityWebRequest.Post($"{Constants.Url}/api/auth/signup", serialized, "application/json");
+        var webRequest = UnityWebRequest.Post($"{Constants.AIUrl}/api/auth/signup", serialized, "application/json");
         
         yield return webRequest.SendWebRequest();
         
