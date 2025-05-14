@@ -7,8 +7,10 @@ using Screen = UnityEngine.Device.Screen;
 
 public class PhotoCapture : MonoBehaviour
 {
-    [SerializeField] private InputActionReference cameraInputAction;
+    public event Action<Texture2D> OnPhotoTaken;
     
+    [SerializeField] private InputActionReference cameraInputAction;
+
     [Header("Photo Taker")]
     [SerializeField] private Image photoDisplayArea;
     [SerializeField] private GameObject photoFrame;
@@ -24,7 +26,11 @@ public class PhotoCapture : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource cameraAudio;
 
+    [Header("Visuals to Hide")]
+    [SerializeField] private GameObject leftControllerVisual;
+    [SerializeField] private GameObject rightControllerVisual;
     [SerializeField] private Canvas subtitleCanvas;
+    [SerializeField] private GameObject pastCaptureGameObject;
 
     public Texture2D[] previousScreenCaptures = new Texture2D[10];
     
@@ -55,6 +61,9 @@ public class PhotoCapture : MonoBehaviour
     {
         cameraUI.SetActive(false);
         subtitleCanvas?.gameObject.SetActive(false);
+        leftControllerVisual?.SetActive(false);
+        rightControllerVisual?.SetActive(false);
+        pastCaptureGameObject?.SetActive(false);
         viewingPhoto = true;
         
         yield return new WaitForEndOfFrame();
@@ -65,9 +74,13 @@ public class PhotoCapture : MonoBehaviour
         screenCapture.Apply();
         ShowPhoto();
         subtitleCanvas?.gameObject.SetActive(true);
+        leftControllerVisual?.SetActive(true);
+        rightControllerVisual?.SetActive(true);
+        pastCaptureGameObject?.SetActive(true);
 
         previousScreenCaptures[screenIndex] = Instantiate(screenCapture);
         screenIndex = (screenIndex + 1) % previousScreenCaptures.Length;
+        OnPhotoTaken?.Invoke(previousScreenCaptures[screenIndex]);
     }
 
     private void ShowPhoto()
