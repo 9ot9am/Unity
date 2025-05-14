@@ -10,6 +10,7 @@ public class ServerTest: MonoBehaviour
     public event Action<AudioClip> audioReceived;
     public AudioSource audioSource;
 
+    /*
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
@@ -17,6 +18,7 @@ public class ServerTest: MonoBehaviour
             TestServerAudio();
         }
     }
+    */
     
     public IEnumerator UploadWavFile(string filePath)
     {
@@ -26,44 +28,55 @@ public class ServerTest: MonoBehaviour
             yield break;
         }
 
-        using (UnityWebRequest fileReader = UnityWebRequest.Get(filePath))
-        {
-            // Important: Set Load Type equivalent for runtime loading if possible,
-            // or ensure the AudioClip is fully loaded before GetData.
-            // For GetAudioClip, data should be accessible after download.
+        using UnityWebRequest fileReader = UnityWebRequest.Get(filePath);
+        // Important: Set Load Type equivalent for runtime loading if possible,
+        // or ensure the AudioClip is fully loaded before GetData.
+        // For GetAudioClip, data should be accessible after download.
 
-            yield return fileReader.SendWebRequest();
-            byte[] binaryAudioData = fileReader.downloadHandler.data;
-            Debug.Log(binaryAudioData.Length);
-            WWWForm formData = new WWWForm();
-            formData.AddBinaryData(
-                "file",
-                binaryAudioData,
-                "aaa.wav",
-                "audio/wav");
+        yield return fileReader.SendWebRequest();
+        byte[] binaryAudioData = fileReader.downloadHandler.data;
+        Debug.Log(binaryAudioData.Length);
+        WWWForm formData = new WWWForm();
+        formData.AddBinaryData(
+            "file",
+            binaryAudioData,
+            "aaa.wav",
+            "audio/wav");
+
+        // Create a new UnityWebRequest for POSTing or PUTting
+        // For PUT:
+        // UnityWebRequest uwr = UnityWebRequest.Put(uploadURL, File.ReadAllBytes(filePath)); // Reads all bytes into memory
+        // Or, more efficiently for large files with UploadHandlerFile:
+        UnityWebRequest uwr = UnityWebRequest.Post(Constants.AIUrl + "/api/audio/enhanced", formData); // Or kHttpVerbPOST
+
+        // Setup UploadHandlerFile - this streams the file from disk
+        //uwr.uploadHandler = new UploadHandlerFile(filePath);
+        // Optionally set content type if the server requires it for raw uploads
+        //uwr.uploadHandler.contentType = "application/octet-stream"; // Or "application/octet-stream"
+
+        // Setup DownloadHandler to get the server's response
+        uwr.downloadHandler = new DownloadHandlerAudioClip(Constants.AIUrl + "/api/audio/enhanced", AudioType.WAV);
+        ((DownloadHandlerAudioClip)uwr.downloadHandler).streamAudio = true;
             
+        // Set any other headers if needed (e.g., authorization)
+        // uwr.SetRequestHeader("Authorization", "Bearer YOUR_TOKEN");
+        //uwr.SetRequestHeader("Content-Type", "application/octet-stream"); // Often needed for PUT or raw POST
 
+        Debug.Log("Uploading " + filePath + " to " + Constants.AIUrl + "/api/audio/enhanced");
 
-            // Create a new UnityWebRequest for POSTing or PUTting
-            // For PUT:
-            // UnityWebRequest uwr = UnityWebRequest.Put(uploadURL, File.ReadAllBytes(filePath)); // Reads all bytes into memory
-            // Or, more efficiently for large files with UploadHandlerFile:
-            UnityWebRequest uwr = UnityWebRequest.Post(Constants.AIUrl + "/api/audio/enhanced", formData); // Or kHttpVerbPOST
-
-            // Setup UploadHandlerFile - this streams the file from disk
-            //uwr.uploadHandler = new UploadHandlerFile(filePath);
-            // Optionally set content type if the server requires it for raw uploads
-            //uwr.uploadHandler.contentType = "application/octet-stream"; // Or "application/octet-stream"
-
-            // Setup DownloadHandler to get the server's response
-            uwr.downloadHandler = new DownloadHandlerAudioClip(Constants.AIUrl + "/api/audio/enhanced", AudioType.WAV);
-
-            // Set any other headers if needed (e.g., authorization)
-            // uwr.SetRequestHeader("Authorization", "Bearer YOUR_TOKEN");
-            //uwr.SetRequestHeader("Content-Type", "application/octet-stream"); // Often needed for PUT or raw POST
-
-            Debug.Log("Uploading " + filePath + " to " + Constants.AIUrl + "/api/audio/enhanced");
-
+        while (uwr.result == UnityWebRequest.Result.InProgress)
+            yield return null;
+            
+        if (uwr.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(uwr.error);
+        }
+        else
+        {
+            audioReceived?.Invoke(DownloadHandlerAudioClip.GetContent(uwr));
+        }
+            
+        /*
             yield return uwr.SendWebRequest();
 
             if (uwr.result == UnityWebRequest.Result.ConnectionError ||
@@ -79,12 +92,10 @@ public class ServerTest: MonoBehaviour
                 
                 AudioClip clip = DownloadHandlerAudioClip.GetContent(uwr);
                 audioReceived?.Invoke(clip);
-                // Optionally, delete the local file after successful upload
-                // File.Delete(filePath);
             }
+            */
 
-            uwr.Dispose();
-        }
+        uwr.Dispose();
     }
 
 

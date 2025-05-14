@@ -48,6 +48,7 @@ public class PhotoCapture : MonoBehaviour
     private int screenIndex = 0;
     private Texture2D screenCapture;
     private bool viewingPhoto;
+    
     private void Start()
     {
         screenCapture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
@@ -105,8 +106,8 @@ public class PhotoCapture : MonoBehaviour
         pokeRight?.SetActive(true);
 
         previousScreenCaptures[screenIndex] = Instantiate(screenCapture);
+        OnPhotoTaken?.Invoke(Instantiate(previousScreenCaptures[screenIndex]));
         screenIndex = (screenIndex + 1) % previousScreenCaptures.Length;
-        OnPhotoTaken?.Invoke(previousScreenCaptures[screenIndex]);
     }
 
     private void ShowPhoto()
