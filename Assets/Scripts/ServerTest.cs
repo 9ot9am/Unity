@@ -10,6 +10,7 @@ public class ServerTest: MonoBehaviour
     public event Action<AudioClip> audioReceived;
     public AudioSource audioSource;
 
+    /*
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
@@ -17,6 +18,7 @@ public class ServerTest: MonoBehaviour
             TestServerAudio();
         }
     }
+    */
     
     public IEnumerator UploadWavFile(string filePath)
     {

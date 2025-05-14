@@ -223,10 +223,12 @@ public class NPCHelper3DController : MonoBehaviour
     // --- Example Test Input ---
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha1)) SetState(NPCState.Idle);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetState(NPCState.Talking);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetState(NPCState.Excited);
         if (Input.GetKeyDown(KeyCode.Alpha4)) SetState(NPCState.Encouraging);
+        */
         
         if (homingTargetTransform)
         {
